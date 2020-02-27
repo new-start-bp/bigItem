@@ -34,14 +34,20 @@ $(function(){
           e.preventDefault();
           $.ajax({
               type:'post',
-              url:'http://www.liulongbin.top:8086',
+              url:'http://www.liulongbin.top:3007/api/reguser',
               data:$(this).serialize(),
               success:function(res){
-                if(res.status!=1)
+                if(res.status!=0)
                 {
-                   
+                   return layer.msg(res.message)
                 }
-                location.href='/index.html'
+                layer.msg('注册成功，请登录')
+               
+                //直接模拟去登录a标签的点击，来完成切换
+               $('#link-log').click ()
+               //或者
+              //  $('.reg').hide()
+              //   $('.log').show()
               }
           })
     }); 
@@ -51,11 +57,18 @@ $(function(){
     $('#form-log').on('submit',function(e){
         e.preventDefault();
         $.ajax({
-            type:post,
-            url:'http://www.liulongbin.top:8086',
+            type:'post',
+            url:'http://www.liulongbin.top:3007/api/login',
             data:$(this).serialize(),
-            success:function(){
-
+            success:function(res){
+              if(res.status!=0)
+              {
+                 return layer.msg('登录失败')
+              }
+              layer.msg('成功')
+              localStorage.setItem('token',res.token)
+              //然后跳转首页
+              location.href='/index.html'
             }
         })
 
